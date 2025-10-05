@@ -12,8 +12,9 @@
 .title {
   font-size: 24px;
   font-weight: bold;
-  color: #333;
+  color: var(--color);
   margin: 0;
+  transition: color 0.3s ease;
 }
 
 .loading, .error, .empty {
@@ -23,7 +24,7 @@
 }
 
 .loading {
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .error {
@@ -31,7 +32,7 @@
 }
 
 .empty {
-  color: #999;
+  color: var(--text-secondary);
 }
 
 .list {
@@ -40,45 +41,9 @@
   gap: 12px;
 }
 
-.student {
-  background: #f5f5f5;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 16px;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: #e8f5e8;
-    border-color: #4caf50;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-}
-
-.studentInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.name {
-  font-size: 18px;
-  font-weight: 600;
-  color: #333;
-}
-
-.groupId {
-  font-size: 14px;
-  color: #666;
-  background: #e3f2fd;
-  padding: 4px 8px;
-  border-radius: 4px;
-  display: inline-block;
-  width: fit-content;
-}
 
 .refreshButton, .retryButton {
-  background: #4caf50;
+  background: var(--link-color);
   color: white;
   border: none;
   padding: 8px 16px;
@@ -86,12 +51,13 @@
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px var(--shadow);
 
   &:hover {
-    background: #45a049;
+    background: var(--text-primary);
     transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px var(--shadow);
   }
 
   &:active {

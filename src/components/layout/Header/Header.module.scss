@@ -5,11 +5,18 @@
   background-color: var(--background2);
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 0 main.$webSidePadding;
   font-size: 20px;
-  gap: 50px;
+  transition: background-color 0.3s ease;
 }
 
 .title {
   font-weight: bold;
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }

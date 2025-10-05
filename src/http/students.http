@@ -1,0 +1,22 @@
+### GET Students
+GET http://localhost:3000/api/students
+Content-Type: application/json
+
+### POST Add Student
+POST http://localhost:3000/api/students
+Content-Type: application/json
+
+{
+  "first_name": "Новый",
+  "last_name": "Студент",
+  "middle_name": "Тестович",
+  "groupId": 1
+}
+
+### DELETE Student by ID
+DELETE http://localhost:3000/api/students/25
+Content-Type: application/json
+
+### DELETE Student by ID (another example)
+DELETE http://localhost:3000/api/students/26
+Content-Type: application/json

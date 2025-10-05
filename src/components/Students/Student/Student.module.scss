@@ -1,0 +1,72 @@
+.student {
+  background: var(--background2);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px var(--shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+
+  &:hover {
+    background: var(--hover-bg);
+    border-color: var(--link-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow);
+  }
+}
+
+.studentInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color);
+  transition: color 0.3s ease;
+}
+
+.groupId {
+  font-size: 14px;
+  color: var(--text-secondary);
+  background: var(--background3);
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  width: fit-content;
+  transition: all 0.3s ease;
+}
+
+.deleteButton {
+  background: #f44336;
+  color: white;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px var(--shadow);
+  margin-left: 12px;
+
+  &:hover {
+    background: #d32f2f;
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px var(--shadow);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}

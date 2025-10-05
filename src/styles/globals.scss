@@ -1,21 +1,33 @@
 @use './main';
 
 :root {  
+  // Светлая тема (по умолчанию)
   --color: #272727;
-  --color2: #FFF;
+  --color2: #272727;  // Изменил на темный для лучшего контраста
   --background: #FFF;
-  --background2: #E1E1E1;
-  --background3: #434343;  
+  --background2: #F5F5F5;  // Сделал светлее
+  --background3: #E8E8E8;  // Сделал светлее для Footer
+  --border-color: #ddd;
+  --shadow: rgba(0, 0, 0, 0.1);
+  --hover-bg: #f0f0f0;
+  --text-secondary: #666;
+  --text-primary: #272727;  // Добавил для заголовков
+  --link-color: #1976d2;    // Добавил для ссылок
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    // --color: #d8d8d8;
-    // --color2: #000;
-    // --background: #000;
-    // --background2: #1E1E1E;
-    // --background3: #BABABA;
-  }
+[data-theme="dark"] {
+  // Темная тема
+  --color: #d8d8d8;
+  --color2: #d8d8d8;  // Сделал светлым для контраста
+  --background: #1a1a1a;
+  --background2: #2d2d2d;
+  --background3: #404040;
+  --border-color: #444;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --hover-bg: #333;
+  --text-secondary: #aaa;
+  --text-primary: #d8d8d8;  // Добавил для заголовков
+  --link-color: #64b5f6;    // Добавил для ссылок
 }
 
 @font-face {
@@ -58,6 +70,7 @@ body {
   color: var(--color);
   background-color: var(--background);
   font-size: 18px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 
   // @media #{main.$mob} {
   //   font-size: main.vwMax(14px);
@@ -66,7 +79,7 @@ body {
 
 @mixin commons {
   font-family: PTSans;  
-  color: var(--item-color);
+  color: var(--text-primary);
   font-weight: 500;
 }
 
@@ -74,7 +87,7 @@ h1 {
   @include commons;
   font-size: 42px;
   font-weight: bold;
-  color: var(--current-color);
+  color: var(--text-primary);
 
   // @media #{main.$mob} {
   //   font-size: main.vwMax(24px);
@@ -85,6 +98,7 @@ h2 {
   @include commons;
   font-size: 32px;
   font-weight: bold;
+  color: var(--text-primary);
 
   // @media #{main.$mob} {
   //   font-size: main.vwMax(20px);
@@ -95,7 +109,7 @@ h3 {
   @include commons;
   font-size: 24px;
   font-weight: bold;
-  color: var(--link-color);
+  color: var(--text-primary);
 
   // @media #{main.$mob} {
   //   font-size: main.vwMax(18px);
@@ -107,7 +121,7 @@ h4 {
   @include commons;
   font-size: 20px;
   font-weight: bold;
-  color: var(--link-color);
+  color: var(--text-primary);
 
   // @media #{main.$mob} {
   //   font-size: main.vwMax(18px);

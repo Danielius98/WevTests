@@ -1,6 +1,7 @@
 import { dehydrate } from '@tanstack/react-query';
 
 import TanStackQuery from '@/containers/TanStackQuery';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 import queryClient from '@/api/reactQueryClient';
 import { getGroupsApi } from '@/api/groupsApi';
 import { getStudentsApi } from '@/api/studentsApi';
@@ -47,15 +48,17 @@ const RootLayout = async ({ children }: Readonly<{ children: React.ReactNode }>)
 
   return (
     <TanStackQuery state={state}>
-      <html lang="ru">
-        <body>
-          <Header />
-          <Main>
-            <>{children}</>
-          </Main>
-          <Footer />
-        </body>
-      </html>
+      <ThemeProvider>
+        <html lang="ru">
+          <body>
+            <Header />
+            <Main>
+              <>{children}</>
+            </Main>
+            <Footer />
+          </body>
+        </html>
+      </ThemeProvider>
     </TanStackQuery>
   );
 };

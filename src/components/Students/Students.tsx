@@ -1,11 +1,29 @@
 'use client';
 
+import { deleteStudentApi } from '@/api/studentsApi';
 import useStudents from '@/hooks/useStudents';
 import type StudentInterface from '@/types/StudentInterface';
+import Student from './StudentDelete/StudentDelete';
+import AddStudent from './AddStudent/AddStudent';
 import styles from './Students.module.scss';
 
 const Students = (): React.ReactElement => {
   const { students, isLoading, error, refetch } = useStudents();
+
+  const onDeleteHandler = async (id: number) => {
+    try {
+      const success = await deleteStudentApi(id);
+      if (success) {
+        console.log('Student deleted successfully');
+        // Обновляем список студентов после успешного удаления
+        refetch();
+      } else {
+        console.error('Failed to delete student');
+      }
+    } catch (error) {
+      console.error('Error deleting student:', error);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -27,6 +45,7 @@ const Students = (): React.ReactElement => {
       </div>
     );
   }
+  
 
   return (
     <div className={styles.Students}>
@@ -36,21 +55,18 @@ const Students = (): React.ReactElement => {
           Обновить
         </button>
       </div>
+      
+      <AddStudent onStudentAdded={refetch} />
       {students.length === 0 ? (
         <div className={styles.empty}>Студенты не найдены</div>
       ) : (
         <div className={styles.list}>
           {students.map((student: StudentInterface) => (
-            <div key={student.id} className={styles.student}>
-              <div className={styles.studentInfo}>
-                <span className={styles.name}>
-                  {student.last_name} {student.first_name} {student.middle_name}
-                </span>
-                <span className={styles.groupId}>
-                  Группа: {student.groupId}
-                </span>
-              </div>
-            </div>
+            <Student
+              key={student.id}
+              student={student}
+              onDelete={onDeleteHandler}
+            />
           ))}
         </div>
       )}

@@ -1,17 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { addStudentApi } from '@/api/studentsApi';
 import { getGroupsApi } from '@/api/groupsApi';
 import type StudentInterface from '@/types/StudentInterface';
 import type GroupInterface from '@/types/GroupInterface';
 import styles from './AddStudent.module.scss';
 
 interface AddStudentProps {
-  onStudentAdded: () => void;
+  onAdd: (student: Omit<StudentInterface, 'id'>) => void;
 }
 
-const AddStudent = ({ onStudentAdded }: AddStudentProps): React.ReactElement => {
+const AddStudent = ({ onAdd }: AddStudentProps): React.ReactElement => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [groups, setGroups] = useState<GroupInterface[]>([]);
@@ -59,8 +58,7 @@ const AddStudent = ({ onStudentAdded }: AddStudentProps): React.ReactElement => 
         middle_name: formData.middle_name,
         groupId: parseInt(formData.groupId, 10)
       };
-
-      await addStudentApi(newStudent);
+      onAdd(newStudent);
       
       // Сброс формы
       setFormData({
@@ -71,7 +69,6 @@ const AddStudent = ({ onStudentAdded }: AddStudentProps): React.ReactElement => 
       });
       
       setIsOpen(false);
-      onStudentAdded(); // Обновляем список студентов
       
     } catch (error) {
       console.error('Error adding student:', error);

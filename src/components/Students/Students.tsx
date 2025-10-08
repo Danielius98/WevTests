@@ -1,6 +1,5 @@
 'use client';
 
-import { deleteStudentApi } from '@/api/studentsApi';
 import useStudents from '@/hooks/useStudents';
 import type StudentInterface from '@/types/StudentInterface';
 import Student from './StudentDelete/StudentDelete';
@@ -8,22 +7,7 @@ import AddStudent from './AddStudent/AddStudent';
 import styles from './Students.module.scss';
 
 const Students = (): React.ReactElement => {
-  const { students, isLoading, error, refetch } = useStudents();
-
-  const onDeleteHandler = async (id: number) => {
-    try {
-      const success = await deleteStudentApi(id);
-      if (success) {
-        console.log('Student deleted successfully');
-        // Обновляем список студентов после успешного удаления
-        refetch();
-      } else {
-        console.error('Failed to delete student');
-      }
-    } catch (error) {
-      console.error('Error deleting student:', error);
-    }
-  };
+  const { students, isLoading, error, refetch, deleteStudent, addStudent } = useStudents();
 
   if (isLoading) {
     return (
@@ -56,7 +40,7 @@ const Students = (): React.ReactElement => {
         </button>
       </div>
       
-      <AddStudent onStudentAdded={refetch} />
+      <AddStudent onAdd={addStudent} />
       {students.length === 0 ? (
         <div className={styles.empty}>Студенты не найдены</div>
       ) : (
@@ -65,7 +49,7 @@ const Students = (): React.ReactElement => {
             <Student
               key={student.id}
               student={student}
-              onDelete={onDeleteHandler}
+              onDelete={deleteStudent}
             />
           ))}
         </div>

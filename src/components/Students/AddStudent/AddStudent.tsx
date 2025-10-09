@@ -1,13 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { getGroupsApi } from '@/api/groupsApi';
 import type StudentInterface from '@/types/StudentInterface';
 import type GroupInterface from '@/types/GroupInterface';
 import styles from './AddStudent.module.scss';
 
 interface AddStudentProps {
-  onAdd: (student: Omit<StudentInterface, 'id'>) => void;
+  onAdd: (student: Omit<StudentInterface, 'id'> & { uuid?: string }) => void;
 }
 
 const AddStudent = ({ onAdd }: AddStudentProps): React.ReactElement => {
@@ -52,11 +53,12 @@ const AddStudent = ({ onAdd }: AddStudentProps): React.ReactElement => {
     setIsLoading(true);
     
     try {
-      const newStudent: Omit<StudentInterface, 'id'> = {
+      const newStudent: Omit<StudentInterface, 'id'> & { uuid: string } = {
         first_name: formData.first_name,
         last_name: formData.last_name,
         middle_name: formData.middle_name,
-        groupId: parseInt(formData.groupId, 10)
+        groupId: parseInt(formData.groupId, 10),
+        uuid: uuidv4()
       };
       onAdd(newStudent);
       

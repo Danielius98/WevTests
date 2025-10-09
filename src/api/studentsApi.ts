@@ -17,7 +17,7 @@ export const getStudentsApi = async (): Promise<StudentInterface[]> => {
   }
 };
 
-export const addStudentApi = async (student: Omit<StudentInterface, 'id'>): Promise<StudentInterface> => {
+export const addStudentApi = async (student: Omit<StudentInterface, 'id'> & { uuid?: string }): Promise<StudentInterface> => {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API || 'http://localhost:3000/api/';
     const response = await fetch(`${apiUrl}students`, {

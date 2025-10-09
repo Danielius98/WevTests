@@ -4,6 +4,7 @@ interface StudentInterface {
   last_name: string;
   middle_name: string;
   groupId: number;
+  uuid?: string;
 }
 
 export default StudentInterface;

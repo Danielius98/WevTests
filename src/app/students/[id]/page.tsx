@@ -35,3 +35,4 @@ export default async function StudentPage({ params }: PageProps): Promise<React.
   return <Student student={student} />;
 }
 
+

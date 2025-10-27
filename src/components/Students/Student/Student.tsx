@@ -53,3 +53,4 @@ const Student = ({ student }: StudentProps): React.ReactElement => {
 
 export default Student;
 
+

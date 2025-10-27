@@ -5,6 +5,11 @@ interface StudentInterface {
   middle_name: string;
   groupId: number;
   uuid?: string;
+  isDeleting?: boolean;
+  group?: {
+    id: number;
+    name: string;
+  };
 }
 
 export default StudentInterface;

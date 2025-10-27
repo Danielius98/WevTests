@@ -7,7 +7,7 @@ import AddStudent from './AddStudent/AddStudent';
 import styles from './Students.module.scss';
 
 const Students = (): React.ReactElement => {
-  const { students, isLoading, error, refetch, deleteStudent, addStudent } = useStudents();
+  const { students, isLoading, error, refetch, deleteStudent, addStudent, isDeletingStudent, isAddingStudent } = useStudents();
 
   if (isLoading) {
     return (
@@ -40,7 +40,7 @@ const Students = (): React.ReactElement => {
         </button>
       </div>
       
-      <AddStudent onAdd={addStudent} />
+      <AddStudent onAdd={addStudent} isAdding={isAddingStudent} />
       {students.length === 0 ? (
         <div className={styles.empty}>Студенты не найдены</div>
       ) : (
@@ -50,6 +50,7 @@ const Students = (): React.ReactElement => {
               key={student.id}
               student={student}
               onDelete={deleteStudent}
+              isDeleting={isDeletingStudent(student.id)}
             />
           ))}
         </div>
@@ -59,3 +60,4 @@ const Students = (): React.ReactElement => {
 };
 
 export default Students;
+

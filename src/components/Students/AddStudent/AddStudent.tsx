@@ -2,19 +2,26 @@
 
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { getGroupsApi } from '@/api/groupsApi';
+import useGroups from '@/hooks/useGroups';
 import type StudentInterface from '@/types/StudentInterface';
-import type GroupInterface from '@/types/GroupInterface';
 import styles from './AddStudent.module.scss';
 
 interface AddStudentProps {
   onAdd: (student: Omit<StudentInterface, 'id'> & { uuid?: string }) => void;
+  isAdding?: boolean;
 }
 
-const AddStudent = ({ onAdd }: AddStudentProps): React.ReactElement => {
+interface FormErrors {
+  first_name?: string;
+  last_name?: string;
+  groupId?: string;
+}
+
+const AddStudent = ({ onAdd, isAdding = false }: AddStudentProps): React.ReactElement => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [groups, setGroups] = useState<GroupInterface[]>([]);
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [successMessage, setSuccessMessage] = useState('');
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -22,16 +29,38 @@ const AddStudent = ({ onAdd }: AddStudentProps): React.ReactElement => {
     groupId: ''
   });
 
-  const handleOpen = async () => {
-    if (!isOpen) {
-      try {
-        const groupsData = await getGroupsApi();
-        setGroups(groupsData);
-      } catch (error) {
-        console.error('Error loading groups:', error);
-      }
+  // Используем хук для получения групп
+  const { groups } = useGroups();
+
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
+
+    if (!formData.first_name.trim()) {
+      newErrors.first_name = 'Имя обязательно для заполнения';
+    } else if (formData.first_name.trim().length < 2) {
+      newErrors.first_name = 'Имя должно содержать минимум 2 символа';
     }
+
+    if (!formData.last_name.trim()) {
+      newErrors.last_name = 'Фамилия обязательна для заполнения';
+    } else if (formData.last_name.trim().length < 2) {
+      newErrors.last_name = 'Фамилия должна содержать минимум 2 символа';
+    }
+
+    if (!formData.groupId) {
+      newErrors.groupId = 'Выберите группу';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleOpen = () => {
     setIsOpen(!isOpen);
+    if (!isOpen) {
+      setErrors({});
+      setSuccessMessage('');
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -40,26 +69,36 @@ const AddStudent = ({ onAdd }: AddStudentProps): React.ReactElement => {
       ...prev,
       [name]: value
     }));
+
+    // Очищаем ошибку для поля при изменении
+    if (errors[name as keyof FormErrors]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: undefined
+      }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.first_name || !formData.last_name || !formData.groupId) {
-      alert('Пожалуйста, заполните все обязательные поля');
+    if (!validateForm()) {
       return;
     }
 
     setIsLoading(true);
+    setSuccessMessage('');
     
     try {
       const newStudent: Omit<StudentInterface, 'id'> & { uuid: string } = {
-        first_name: formData.first_name,
-        last_name: formData.last_name,
-        middle_name: formData.middle_name,
+        first_name: formData.first_name.trim(),
+        last_name: formData.last_name.trim(),
+        middle_name: formData.middle_name.trim(),
         groupId: parseInt(formData.groupId, 10),
         uuid: uuidv4()
       };
+      
+      // Вызываем mutation
       onAdd(newStudent);
       
       // Сброс формы
@@ -70,11 +109,16 @@ const AddStudent = ({ onAdd }: AddStudentProps): React.ReactElement => {
         groupId: ''
       });
       
-      setIsOpen(false);
+      // Показываем сообщение об успехе и закрываем форму
+      setSuccessMessage('Студент успешно добавлен!');
+      setTimeout(() => {
+        setIsOpen(false);
+        setSuccessMessage('');
+      }, 1500);
       
     } catch (error) {
       console.error('Error adding student:', error);
-      alert('Ошибка при добавлении студента');
+      setErrors({ groupId: 'Ошибка при добавлении студента' });
     } finally {
       setIsLoading(false);
     }
@@ -87,6 +131,8 @@ const AddStudent = ({ onAdd }: AddStudentProps): React.ReactElement => {
       middle_name: '',
       groupId: ''
     });
+    setErrors({});
+    setSuccessMessage('');
     setIsOpen(false);
   };
 
@@ -105,6 +151,12 @@ const AddStudent = ({ onAdd }: AddStudentProps): React.ReactElement => {
           <form onSubmit={handleSubmit} className={styles.form}>
             <h3 className={styles.title}>Добавить нового студента</h3>
             
+            {successMessage && (
+              <div className={styles.successMessage}>
+                {successMessage}
+              </div>
+            )}
+            
             <div className={styles.field}>
               <label htmlFor="last_name" className={styles.label}>
                 Фамилия *
@@ -115,9 +167,13 @@ const AddStudent = ({ onAdd }: AddStudentProps): React.ReactElement => {
                 name="last_name"
                 value={formData.last_name}
                 onChange={handleInputChange}
-                className={styles.input}
-                required
+                className={`${styles.input} ${errors.last_name ? styles.inputError : ''}`}
+                placeholder="Введите фамилию"
+                disabled={isLoading}
               />
+              {errors.last_name && (
+                <span className={styles.errorMessage}>{errors.last_name}</span>
+              )}
             </div>
 
             <div className={styles.field}>
@@ -130,9 +186,13 @@ const AddStudent = ({ onAdd }: AddStudentProps): React.ReactElement => {
                 name="first_name"
                 value={formData.first_name}
                 onChange={handleInputChange}
-                className={styles.input}
-                required
+                className={`${styles.input} ${errors.first_name ? styles.inputError : ''}`}
+                placeholder="Введите имя"
+                disabled={isLoading}
               />
+              {errors.first_name && (
+                <span className={styles.errorMessage}>{errors.first_name}</span>
+              )}
             </div>
 
             <div className={styles.field}>
@@ -146,6 +206,8 @@ const AddStudent = ({ onAdd }: AddStudentProps): React.ReactElement => {
                 value={formData.middle_name}
                 onChange={handleInputChange}
                 className={styles.input}
+                placeholder="Введите отчество (необязательно)"
+                disabled={isLoading}
               />
             </div>
 
@@ -158,16 +220,21 @@ const AddStudent = ({ onAdd }: AddStudentProps): React.ReactElement => {
                 name="groupId"
                 value={formData.groupId}
                 onChange={handleInputChange}
-                className={styles.select}
-                required
+                className={`${styles.select} ${errors.groupId ? styles.inputError : ''}`}
+                disabled={isLoading}
               >
-                <option value="">Выберите группу</option>
+                <option value="">
+                  {groups.length === 0 ? 'Загрузка групп...' : 'Выберите группу'}
+                </option>
                 {groups.map(group => (
                   <option key={group.id} value={group.id}>
                     {group.name}
                   </option>
                 ))}
               </select>
+              {errors.groupId && (
+                <span className={styles.errorMessage}>{errors.groupId}</span>
+              )}
             </div>
 
             <div className={styles.buttons}>
@@ -182,7 +249,7 @@ const AddStudent = ({ onAdd }: AddStudentProps): React.ReactElement => {
               <button
                 type="submit"
                 className={styles.submitButton}
-                disabled={isLoading}
+                disabled={isLoading || groups.length === 0}
               >
                 {isLoading ? 'Добавление...' : 'Добавить'}
               </button>

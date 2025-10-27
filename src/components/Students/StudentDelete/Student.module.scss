@@ -16,6 +16,16 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 12px var(--shadow);
   }
+
+  &.deleting {
+    opacity: 0.6;
+    background: var(--background3);
+    border-color: #f44336;
+    
+    &:hover {
+      transform: none;
+    }
+  }
 }
 
 .studentInfo {
@@ -25,11 +35,23 @@
   flex: 1;
 }
 
+.nameLink {
+  text-decoration: none;
+  color: inherit;
+  
+  &:hover {
+    .name {
+      color: var(--link-color);
+    }
+  }
+}
+
 .name {
   font-size: 18px;
   font-weight: 600;
   color: var(--color);
   transition: color 0.3s ease;
+  cursor: pointer;
 }
 
 .groupId {
@@ -60,13 +82,73 @@
   box-shadow: 0 2px 4px var(--shadow);
   margin-left: 12px;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: #d32f2f;
     transform: scale(1.1);
     box-shadow: 0 4px 8px var(--shadow);
   }
 
-  &:active {
+  &:active:not(:disabled) {
     transform: scale(0.95);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.confirmButtons {
+  display: flex;
+  gap: 8px;
+  margin-left: 12px;
+}
+
+.confirmButton {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px var(--shadow);
+
+  &:hover:not(:disabled) {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px var(--shadow);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.95);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.deleteConfirm {
+  background: #4caf50;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background: #45a049;
+  }
+}
+
+.cancelButton {
+  background: #ff9800;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background: #f57c00;
   }
 }

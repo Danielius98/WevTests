@@ -1,10 +1,11 @@
+import 'reflect-metadata';
 import { dehydrate } from '@tanstack/react-query';
 
 import TanStackQuery from '@/containers/TanStackQuery';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import queryClient from '@/api/reactQueryClient';
-import { getGroupsApi } from '@/api/groupsApi';
-import { getStudentsApi } from '@/api/studentsApi';
+import { StudentService, GroupService } from '@/services/StudentService';
+import { initializeDatabase } from '@/config/database';
 import type GroupInterface from '@/types/GroupInterface';
 import type StudentInterface from '@/types/StudentInterface';
 import Header from '@/components/layout/Header/Header';
@@ -24,12 +25,15 @@ const RootLayout = async ({ children }: Readonly<{ children: React.ReactNode }>)
   let groups: GroupInterface[];
   let students: StudentInterface[];
 
-  // выполняется на сервере - загрузка групп и студентов
+  await initializeDatabase();
   await Promise.all([
     queryClient.prefetchQuery({
       queryKey: ['groups'],
       queryFn: async () => {
-        groups = await getGroupsApi();
+        const groupService = new GroupService();
+        const groupEntities = await groupService.getAllGroups();
+        // Преобразуем entity-объекты в plain objects для передачи в Client Components
+        groups = JSON.parse(JSON.stringify(groupEntities)) as GroupInterface[];
         console.log('Groups', groups);
         return groups;
       },
@@ -37,7 +41,10 @@ const RootLayout = async ({ children }: Readonly<{ children: React.ReactNode }>)
     queryClient.prefetchQuery({
       queryKey: ['students'],
       queryFn: async () => {
-        students = await getStudentsApi();
+        const studentService = new StudentService();
+        const studentEntities = await studentService.getAllStudents();
+        // Преобразуем entity-объекты в plain objects для передачи в Client Components
+        students = JSON.parse(JSON.stringify(studentEntities)) as StudentInterface[];
         console.log('Students', students);
         return students;
       },

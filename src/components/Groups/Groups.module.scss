@@ -3,107 +3,86 @@
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .title {
-  font-size: 24px;
+  font-size: 32px;
   font-weight: bold;
   color: var(--color);
-  margin: 0;
-  transition: color 0.3s ease;
-}
-
-.loading, .error, .empty {
-  text-align: center;
-  padding: 40px;
-  font-size: 18px;
-}
-
-.loading {
-  color: var(--text-secondary);
-}
-
-.error {
-  color: #d32f2f;
-}
-
-.empty {
-  color: var(--text-secondary);
 }
 
 .list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 20px;
 }
 
 .group {
   background: var(--background2);
-  border: 1px solid var(--border-color);
   border-radius: 8px;
-  padding: 16px;
-  transition: all 0.3s ease;
-  box-shadow: 0 1px 3px var(--shadow);
-
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+  
   &:hover {
-    background: var(--hover-bg);
-    border-color: var(--link-color);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px var(--shadow);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
 }
 
-.groupInfo {
+.groupName {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--link-color);
+  margin: 0 0 16px 0;
+}
+
+.students {
+  margin-top: 16px;
+}
+
+.studentsTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 0 0 12px 0;
+}
+
+.studentsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.name {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--color);
-  transition: color 0.3s ease;
-}
-
-.description {
-  font-size: 14px;
-  color: var(--text-secondary);
-  transition: color 0.3s ease;
-}
-
-.refreshButton, .retryButton {
-  background: var(--link-color);
-  color: white;
-  border: none;
-  padding: 8px 16px;
+.student {
+  padding: 10px 16px;
+  background: var(--background);
   border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px var(--shadow);
-
+  border-left: 3px solid var(--link-color);
+  color: var(--color);
+  transition: background-color 0.2s ease;
+  
   &:hover {
-    background: var(--text-primary);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px var(--shadow);
-  }
-
-  &:active {
-    transform: translateY(0);
+    background: color-mix(in srgb, var(--link-color) 5%, transparent);
   }
 }
 
-.retryButton {
-  margin-top: 12px;
-  background: #f44336;
+.noStudents {
+  color: var(--text-secondary);
+  font-style: italic;
+  margin: 0;
+  padding: 16px;
+  text-align: center;
+  background: color-mix(in srgb, var(--text-secondary) 5%, transparent);
+  border-radius: 4px;
+}
 
-  &:hover {
-    background: #d32f2f;
-  }
+.empty {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-secondary);
+  font-size: 18px;
 }

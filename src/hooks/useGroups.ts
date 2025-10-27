@@ -4,19 +4,23 @@ import type GroupInterface from '@/types/GroupInterface';
 
 interface GroupsHookInterface {
   groups: GroupInterface[];
+  isLoading: boolean;
+  error: Error | null;
+  refetch: () => void;
 }
 
 const useGroups = (): GroupsHookInterface => {
-  // const queryClient = useQueryClient();
-
-  const { data } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['groups'],
     queryFn: () => getGroupsApi(),
-    enabled: false,
+    enabled: true, // Включаем автоматическую загрузку
   });
 
   return {
     groups: data ?? [],
+    isLoading,
+    error: (error as Error) ?? null,
+    refetch,
   };
 };
 

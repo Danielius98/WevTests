@@ -6,13 +6,15 @@ export const getGroupsApi = async (): Promise<GroupInterface[]> => {
     const response = await fetch(`${apiUrl}groups`);
 
     if (!response.ok) {
-      throw new Error(`Ошибка HTTP: ${response.status}${response.statusText}`);
+      const errorData = await response.json().catch(() => ({}));
+      const errorMessage = errorData.error || `Ошибка HTTP: ${response.status} ${response.statusText}`;
+      throw new Error(errorMessage);
     }
+    
     const groups = await response.json() as GroupInterface[];
     return groups;
-  }
-  catch (err) {
-    console.log('>>> getGroupsApi', err);
-    return [] as GroupInterface[];
+  } catch (err) {
+    console.error('>>> getGroupsApi', err);
+    throw err; // Пробрасываем ошибку для обработки в TanStack Query
   }
 };
